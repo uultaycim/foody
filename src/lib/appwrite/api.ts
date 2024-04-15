@@ -10,25 +10,28 @@ import { IUpdatePost, INewPost, INewUser, IUpdateUser } from "@/types";
 // ============================== SIGN UP
 export async function createUserAccount(user: INewUser) {
   try {
+    debugger;
     const newAccount = await account.create(
       ID.unique(),
       user.email,
       user.password,
-      user.name
+      user.username
     );
-
+    console.log(newAccount)
     if (!newAccount) throw Error;
-
-    const avatarUrl = avatars.getInitials(user.name);
+    debugger;
+    const avatarUrl = avatars.getInitials(user.username);
 
     const newUser = await saveUserToDB({
       accountId: newAccount.$id,
-      name: newAccount.name,
+      username: newAccount.name,
       email: newAccount.email,
-      username: user.username,
       imageUrl: avatarUrl,
+      accountType: user.accounttype,
+      language: user.language,
     });
-
+    debugger;
+     console.log(newUser)
     return newUser;
   } catch (error) {
     console.log(error);
@@ -39,10 +42,11 @@ export async function createUserAccount(user: INewUser) {
 // ============================== SAVE USER TO DB
 export async function saveUserToDB(user: {
   accountId: string;
-  email: string;
-  name: string;
-  imageUrl: URL;
   username?: string;
+  email: string;
+  imageUrl: URL;
+  accountType: string;
+  language: string;
 }) {
   try {
     const newUser = await databases.createDocument(

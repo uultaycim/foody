@@ -41,8 +41,10 @@ export type IUser = {
 };
 
 export type INewUser = {
-  name: string;
-  email: string;
   username: string;
+  email: string;
   password: string;
+  accounttype:string;
+  language:string;
 };
+
