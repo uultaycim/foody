@@ -16,7 +16,7 @@ const SignupForm = () => {
  const { toast } = useToast()
  const navigate = useNavigate();
 
- const {checkAuthUser, isLoading:isUserLoading} = useUserContext()
+ const {isLoading:isUserLoading} = useUserContext()
 
  const form = useForm<z.infer<typeof SignupValidation>>({
   resolver: zodResolver(SignupValidation),
@@ -31,7 +31,7 @@ const SignupForm = () => {
 // Queries
  const {mutateAsync: createUserAccount,isPending: isCreatingAccount } = useCreateUserAccount()
 
- const{mutateAsync: signInAccount, isPending: isSigningIn} = useSignInAccount();
+//  const{mutateAsync: signInAccount, isPending: isSigningIn} = useSignInAccount();
 
 
 
@@ -43,24 +43,25 @@ const SignupForm = () => {
     if(!newUser){
       return toast({title:'Sign up failed. Please try again'})
     }
-    const session = await signInAccount({
-      email: values.email,
-      password: values.password,
+    // const session = await signInAccount({
+    //   email: values.email,
+    //   password: values.password,
     
-    })
+    // })
+    navigate('/sign-in')
+    // if(!session){
+    //   return toast({title:'Sign in failed. Please try again'})
+    // }
+    
 
-    if(!session){
-      return toast({title:'Sign in failed. Please try again'})
-    }
+    // const isLoggedIn = await checkAuthUser();
 
-    const isLoggedIn = await checkAuthUser();
-
-    if(isLoggedIn){
-      form.reset();
-      navigate('/')
-    } else{
-      return toast({title:'Sign up failed. Please try again'})
-    }
+    // if(isLoggedIn){
+    //   form.reset();
+    //   navigate('/')
+    // } else{
+    //   return toast({title:'Sign up failed. Please try again'})
+    // }
   }
   return (
 

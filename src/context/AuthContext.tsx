@@ -42,6 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const checkAuthUser = async () => {
     setIsLoading(true);
     try {
+      console.log("checkAuthUserCalled")
       const currentAccount = await getCurrentUser();
       if (currentAccount) {
         setUser({
@@ -53,32 +54,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           bio: currentAccount.bio,
         });
         setIsAuthenticated(true);
-
+      
         return true;
       }
-
+      
       return false;
 
     } catch (error) {
-      console.log(error);
+      console.log(error, "eto v checkAuthUser");
       return false;
     } finally {
       setIsLoading(false);
     }
   };
 
-  useEffect(() => {
+  // useEffect(() => {
     
-    if (
-      localStorage.getItem('cookieFallback') === '[]'
-      // ||
-      // localStorage.getItem('cookieFallback') === null
-      )navigate("/sign-in");
+  //   if (
+  //     localStorage.getItem('cookieFallback') === '[]'
+  //     // ||
+  //     // localStorage.getItem('cookieFallback') === null
+  //     )navigate("/sign-in");
     
-    else {
-        checkAuthUser();
-      }
-  }, []);
+  //   else {
+  //       console.log("checkAuthuserCalled in useEffect")
+  //       checkAuthUser();
+  //     }
+  // }, []);
 
   const value = {
     user,

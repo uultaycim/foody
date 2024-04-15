@@ -38,11 +38,11 @@ const LeftSidebar = () => {
           />
         </Link>
 
-        {isLoading || !user.email ? (
+        {/* {isLoading || !user.email ? (
           <div className="h-14">
             <Loader />
           </div>
-        ) : (
+        ) : ( */}
           <Link to={`/profile/${user.id}`} className="flex gap-3 items-center">
             <img
               src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
@@ -54,7 +54,7 @@ const LeftSidebar = () => {
               <p className="small-regular text-light-3">@{user.username}</p>
             </div>
           </Link>
-        )}
+        {/* )} */}
 
         <ul className="flex flex-col gap-6">
           {sidebarLinks.map((link: INavLink) => {

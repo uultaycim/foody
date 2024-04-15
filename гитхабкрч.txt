@@ -1,0 +1,5 @@
+git init
+git add .
+git commit -m "Первый коммит: добавлены файлы проекта"
+git remote add origin <URL репозитория на GitHub>
+git push -u origin master
