@@ -81,9 +81,7 @@ const PostDetails = () => {
                       {multiFormatDateString(post?.$createdAt)}
                     </p>
                     •
-                    <p className="subtle-semibold lg:small-regular">
-                      {post?.location}
-                    </p>
+                    
                   </div>
                 </div>
               </Link>

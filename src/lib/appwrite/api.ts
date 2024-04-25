@@ -122,14 +122,17 @@ export async function signOutAccount() {
 // ============================================================
 
 // ============================== CREATE POST
+
 export async function createPost(post: INewPost) {
   try {
+    debugger;
     // Upload file to appwrite storage
     const uploadedFile = await uploadFile(post.file[0]);
 
     if (!uploadedFile) throw Error;
 
     // Get file url
+    debugger;
     const fileUrl = getFilePreview(uploadedFile.$id);
     if (!fileUrl) {
       await deleteFile(uploadedFile.$id);
@@ -140,6 +143,7 @@ export async function createPost(post: INewPost) {
     const tags = post.tags?.replace(/ /g, "").split(",") || [];
 
     // Create post
+ 
     const newPost = await databases.createDocument(
       appwriteConfig.databaseId,
       appwriteConfig.postCollectionId,
@@ -149,10 +153,10 @@ export async function createPost(post: INewPost) {
         caption: post.caption,
         imageUrl: fileUrl,
         imageId: uploadedFile.$id,
-        location: post.location,
         tags: tags,
       }
     );
+    debugger; console.log("Doc created")
 
     if (!newPost) {
       await deleteFile(uploadedFile.$id);
@@ -168,12 +172,13 @@ export async function createPost(post: INewPost) {
 // ============================== UPLOAD FILE
 export async function uploadFile(file: File) {
   try {
+    debugger;
     const uploadedFile = await storage.createFile(
       appwriteConfig.storageId,
       ID.unique(),
       file
     );
-
+    console.log("storage created")
     return uploadedFile;
   } catch (error) {
     console.log(error);
@@ -182,7 +187,7 @@ export async function uploadFile(file: File) {
 
 // ============================== GET FILE URL
 export function getFilePreview(fileId: string) {
-  try {
+  try {debugger;
     const fileUrl = storage.getFilePreview(
       appwriteConfig.storageId,
       fileId,
@@ -191,6 +196,7 @@ export function getFilePreview(fileId: string) {
       "top",
       100
     );
+    console.log("filePreview",fileUrl)
 
     if (!fileUrl) throw Error;
 
@@ -306,7 +312,6 @@ export async function updatePost(post: IUpdatePost) {
         caption: post.caption,
         imageUrl: image.imageUrl,
         imageId: image.imageId,
-        location: post.location,
         tags: tags,
       }
     );

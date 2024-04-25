@@ -10,8 +10,9 @@ type PostCardProps = {
 };
 
 const PostCard = ({ post }: PostCardProps) => {
+  console.log(post)
   const { user } = useUserContext();
-
+  
   if (!post.creator) return;
 
   return (
@@ -31,16 +32,13 @@ const PostCard = ({ post }: PostCardProps) => {
 
           <div className="flex flex-col">
             <p className="base-medium lg:body-bold text-light-1">
-              {post.creator.name}
+              {post.creator.username}
             </p>
             <div className="flex-center gap-2 text-light-3">
               <p className="subtle-semibold lg:small-regular ">
                 {multiFormatDateString(post.$createdAt)}
               </p>
               •
-              <p className="subtle-semibold lg:small-regular">
-                {post.location}
-              </p>
             </div>
           </div>
         </div>
@@ -69,16 +67,28 @@ const PostCard = ({ post }: PostCardProps) => {
           </ul>
         </div>
 
-        <img
-          src={post.imageUrl || "/assets/icons/profile-placeholder.svg"}
-          alt="post image"
-          className="post-card_img"
-        />
+        {
+  post.type === 'video' ? (
+   
+    <video controls className="post-card_img">
+      <source src={post.imageUrl} type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  ) : (
+    <img
+      src={post.imageUrl || "/assets/icons/profile-placeholder.svg"}
+      alt="post image"
+      className="post-card_img"
+    />
+  )
+}
+
       </Link>
 
       <PostStats post={post} userId={user.id} />
     </div>
   );
+  debugger;
 };
 
 export default PostCard;

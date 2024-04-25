@@ -33,9 +33,8 @@ const PostForm = ({ post, action }: PostFormProps) => {
   const form = useForm<z.infer<typeof PostValidation>>({
     resolver: zodResolver(PostValidation),
     defaultValues: {
-      caption: post ? post?.caption : "",
+      caption: post ? post.caption : "",
       file: [],
-      location: post ? post.location : "",
       tags: post ? post.tags.join(",") : "",
     },
   });
@@ -48,7 +47,8 @@ const PostForm = ({ post, action }: PostFormProps) => {
 
   // Handler
   const handleSubmit = async (value: z.infer<typeof PostValidation>) => {
-    // ACTION = UPDATE
+    // ACTION = UPDATE'
+    console.log("handleSubmit вызван");
     if (post && action === "Update") {
       const updatedPost = await updatePost({
         ...value,
@@ -66,11 +66,14 @@ const PostForm = ({ post, action }: PostFormProps) => {
     }
 
     // ACTION = CREATE
+    console.log(isLoadingCreate)
     const newPost = await createPost({
       ...value,
       userId: user.id,
     });
-
+    console.log(newPost)
+    debugger;
+    console.log("createPost")
     if (!newPost) {
       toast({
         title: `${action} post failed. Please try again.`,
@@ -112,20 +115,6 @@ const PostForm = ({ post, action }: PostFormProps) => {
                   fieldChange={field.onChange}
                   mediaUrl={post?.imageUrl}
                 />
-              </FormControl>
-              <FormMessage className="shad-form_message" />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="location"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="shad-form_label">Add Location</FormLabel>
-              <FormControl>
-                <Input type="text" className="shad-input" {...field} />
               </FormControl>
               <FormMessage className="shad-form_message" />
             </FormItem>

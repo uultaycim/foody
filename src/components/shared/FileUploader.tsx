@@ -12,12 +12,14 @@ type FileUploaderProps = {
 const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
   const [file, setFile] = useState<File[]>([]);
   const [fileUrl, setFileUrl] = useState<string>(mediaUrl);
+  const [fileType, setFileType] = useState<string | null>(null); // Добавлено состояние для отслеживания типа файла
 
   const onDrop = useCallback(
     (acceptedFiles: FileWithPath[]) => {
       setFile(acceptedFiles);
       fieldChange(acceptedFiles);
       setFileUrl(convertFileToUrl(acceptedFiles[0]));
+      setFileType(acceptedFiles[0].type.split("/")[0]); // Определение типа файла (image или video)
     },
     [file]
   );
@@ -26,20 +28,28 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
     onDrop,
     accept: {
       "image/*": [".png", ".jpeg", ".jpg"],
+      "video/*": [".mp4", ".avi", ".mov"],
     },
   });
 
   return (
     <div
       {...getRootProps()}
-      className="flex flex-center flex-col bg-dark-3 rounded-xl cursor-pointer">
+      className="flex flex-center flex-col bg-dark-3 rounded-xl cursor-pointer"
+    >
       <input {...getInputProps()} className="cursor-pointer" />
 
       {fileUrl ? (
         <>
-          <div className="flex flex-1 justify-center w-full p-5 lg:p-10">
-            <img src={fileUrl} alt="image" className="file_uploader-img" />
-          </div>
+          {fileType === "image" ? ( // Если тип файла - изображение
+            <div className="flex flex-1 justify-center w-full p-5 lg:p-10">
+              <img src={fileUrl} alt="image" className="file_uploader-img" />
+            </div>
+          ) : fileType === "video" ? ( // Если тип файла - видео
+            <div className="flex flex-1 justify-center w-full p-5 lg:p-10">
+              <video src={fileUrl} controls className="file_uploader-video" />
+            </div>
+          ) : null}
           <p className="file_uploader-label">Click or drag photo to replace</p>
         </>
       ) : (
@@ -52,9 +62,9 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
           />
 
           <h3 className="base-medium text-light-2 mb-2 mt-6">
-            Drag photo here
+            Drag photo or video here
           </h3>
-          <p className="text-light-4 small-regular mb-6">SVG, PNG, JPG</p>
+          <p className="text-light-4 small-regular mb-6">SVG, PNG, JPG, MP4, AVI, MOV</p>
 
           <Button type="button" className="shad-button_dark_4">
             Select from computer
